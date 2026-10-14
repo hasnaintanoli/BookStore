@@ -1,3 +1,4 @@
+import '../theme/book_theme.dart';
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import 'user_session.dart';
@@ -98,21 +99,21 @@ class _LoginScreenState extends State<LoginScreen> {
   }) {
     return InputDecoration(
       labelText: label,
-      prefixIcon: Icon(icon, color: const Color(0xFF1E4D3B)),
+      prefixIcon: Icon(icon, color: context.bookColors.primary),
       suffixIcon: suffixIcon,
       filled: true,
-      fillColor: Colors.white,
+      fillColor: context.bookColors.surface,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
         borderSide: BorderSide.none,
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: BorderSide(color: Colors.grey.shade300),
+        borderSide: BorderSide(color: context.bookColors.border),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(color: Color(0xFF1E4D3B), width: 1.5),
+        borderSide: BorderSide(color: context.bookColors.primary, width: 1.5),
       ),
     );
   }
@@ -127,7 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: const Color(0xFFF5F5F0),
+      backgroundColor: context.bookColors.background,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
       ),
@@ -145,18 +146,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Forgot Password?',
                     style: TextStyle(
                       fontSize: 25,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF1E4D3B),
+                      color: context.bookColors.primary,
                     ),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     'Enter your email and we will send you a password reset link.',
-                    style: TextStyle(color: Colors.grey.shade700),
+                    style: TextStyle(color: context.bookColors.secondaryText),
                   ),
                   const SizedBox(height: 20),
                   TextField(
@@ -216,19 +217,19 @@ class _LoginScreenState extends State<LoginScreen> {
                               }
                             },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF1E4D3B),
-                        foregroundColor: Colors.white,
+                        backgroundColor: context.bookColors.primary,
+                        foregroundColor: context.bookColors.onPrimary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(14),
                         ),
                       ),
                       child: sending
-                          ? const SizedBox(
+                          ? SizedBox(
                               width: 22,
                               height: 22,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
-                                color: Colors.white,
+                                color: context.bookColors.onPrimary,
                               ),
                             )
                           : const Text(
@@ -269,7 +270,7 @@ class _LoginScreenState extends State<LoginScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: const Color(0xFFF5F5F0),
+      backgroundColor: context.bookColors.background,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
       ),
@@ -289,18 +290,20 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         'Create Account',
                         style: TextStyle(
                           fontSize: 26,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF1E4D3B),
+                          color: context.bookColors.primary,
                         ),
                       ),
                       const SizedBox(height: 6),
                       Text(
                         'Create your bookstore account.',
-                        style: TextStyle(color: Colors.grey.shade700),
+                        style: TextStyle(
+                          color: context.bookColors.secondaryText,
+                        ),
                       ),
                       const SizedBox(height: 20),
                       TextFormField(
@@ -423,7 +426,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       CheckboxListTile(
                         contentPadding: EdgeInsets.zero,
                         value: acceptedTerms,
-                        activeColor: const Color(0xFF1E4D3B),
+                        activeColor: context.bookColors.primary,
                         title: const Text('I agree to the Terms & Conditions'),
                         onChanged: (value) {
                           setModalState(() {
@@ -490,19 +493,19 @@ class _LoginScreenState extends State<LoginScreen> {
                                   }
                                 },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF1E4D3B),
-                            foregroundColor: Colors.white,
+                            backgroundColor: context.bookColors.primary,
+                            foregroundColor: context.bookColors.onPrimary,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(14),
                             ),
                           ),
                           child: submitting
-                              ? const SizedBox(
+                              ? SizedBox(
                                   width: 22,
                                   height: 22,
                                   child: CircularProgressIndicator(
                                     strokeWidth: 2,
-                                    color: Colors.white,
+                                    color: context.bookColors.onPrimary,
                                   ),
                                 )
                               : const Text(
@@ -527,8 +530,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const green = Color(0xFF1E4D3B);
-    const cream = Color(0xFFF5F5F0);
+    final green = context.bookColors.primary;
+    final cream = context.bookColors.background;
 
     return Scaffold(
       backgroundColor: cream,
@@ -551,15 +554,15 @@ class _LoginScreenState extends State<LoginScreen> {
                           color: green,
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.menu_book_rounded,
-                          color: Colors.white,
+                          color: context.bookColors.onPrimary,
                           size: 38,
                         ),
                       ),
                     ),
                     const SizedBox(height: 22),
-                    const Center(
+                    Center(
                       child: Text(
                         'Welcome Back',
                         style: TextStyle(
@@ -575,7 +578,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         'Sign in to continue to your bookstore',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: Colors.grey.shade700,
+                          color: context.bookColors.secondaryText,
                           fontSize: 15,
                         ),
                       ),
@@ -632,7 +635,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       alignment: Alignment.centerRight,
                       child: TextButton(
                         onPressed: showForgotPassword,
-                        child: const Text(
+                        child: Text(
                           'Forgot Password?',
                           style: TextStyle(
                             color: green,
@@ -649,18 +652,18 @@ class _LoginScreenState extends State<LoginScreen> {
                         onPressed: isLoading ? null : login,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: green,
-                          foregroundColor: Colors.white,
+                          foregroundColor: context.bookColors.onPrimary,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(14),
                           ),
                         ),
                         child: isLoading
-                            ? const SizedBox(
+                            ? SizedBox(
                                 width: 24,
                                 height: 24,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
-                                  color: Colors.white,
+                                  color: context.bookColors.onPrimary,
                                 ),
                               )
                             : const Text(
@@ -679,11 +682,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         children: [
                           Text(
                             "Don't have an account? ",
-                            style: TextStyle(color: Colors.grey.shade700),
+                            style: TextStyle(
+                              color: context.bookColors.secondaryText,
+                            ),
                           ),
                           GestureDetector(
                             onTap: showCreateAccount,
-                            child: const Text(
+                            child: Text(
                               'Create Account',
                               style: TextStyle(
                                 color: green,

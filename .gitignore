@@ -59,6 +59,8 @@ app.*.map.json
 
 # Local Firebase emulator configuration
 /firebase.emulators.json
+/supabase/.temp/
+/supabase/.branches/
 
 # Local editor/agent settings and scratch files
 /.vscode/

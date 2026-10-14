@@ -1,3 +1,4 @@
+import '../theme/book_theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
@@ -50,17 +51,17 @@ class _AuthGateState extends State<AuthGate> {
 
   @override
   Widget build(BuildContext context) {
-    const green = Color(0xFF1E4D3B);
-    const cream = Color(0xFFF5F5F0);
+    final green = context.bookColors.primary;
+    final cream = context.bookColors.background;
 
-    return const Scaffold(
+    return Scaffold(
       backgroundColor: cream,
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(Icons.menu_book_rounded, color: green, size: 56),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             CircularProgressIndicator(color: green),
           ],
         ),

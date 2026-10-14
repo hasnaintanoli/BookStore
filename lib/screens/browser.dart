@@ -1,3 +1,4 @@
+import '../theme/book_theme.dart';
 import 'package:flutter/material.dart';
 import '../models/book.dart';
 import '../widgets/book_detail_modal.dart';
@@ -80,25 +81,25 @@ class _BrowserScreenState extends State<BrowserScreen> {
     );
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F0),
+      backgroundColor: context.bookColors.background,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFF5F5F0),
+        backgroundColor: context.bookColors.background,
         elevation: 0,
-        title: const Text(
+        title: Text(
           'Browse Library',
           style: TextStyle(
-            color: Colors.black,
+            color: context.bookColors.text,
             fontWeight: FontWeight.bold,
             fontSize: 22,
           ),
         ),
         actions: [
           CircleAvatar(
-            backgroundColor: Colors.white,
+            backgroundColor: context.bookColors.surface,
             child: IconButton(
-              icon: const Icon(
+              icon: Icon(
                 Icons.shopping_bag_outlined,
-                color: Colors.black,
+                color: context.bookColors.text,
               ),
               onPressed: () => Navigator.pushNamed(context, '/cart'),
             ),
@@ -120,11 +121,17 @@ class _BrowserScreenState extends State<BrowserScreen> {
               decoration: InputDecoration(
                 hintText: 'Search titles, authors, genres',
 
-                prefixIcon: const Icon(Icons.search, color: Colors.black45),
+                prefixIcon: Icon(
+                  Icons.search,
+                  color: context.bookColors.mutedText,
+                ),
 
                 suffixIcon: searchQuery.isNotEmpty
                     ? IconButton(
-                        icon: const Icon(Icons.clear, color: Colors.black45),
+                        icon: Icon(
+                          Icons.clear,
+                          color: context.bookColors.mutedText,
+                        ),
                         onPressed: () {
                           setState(() {
                             searchQuery = '';
@@ -134,7 +141,7 @@ class _BrowserScreenState extends State<BrowserScreen> {
                     : null,
 
                 filled: true,
-                fillColor: Colors.white,
+                fillColor: context.bookColors.surface,
 
                 contentPadding: const EdgeInsets.symmetric(vertical: 12),
 
@@ -161,10 +168,13 @@ class _BrowserScreenState extends State<BrowserScreen> {
                         child: FilterChip(
                           selected: isSelected,
                           label: Text(category),
-                          backgroundColor: Colors.white,
-                          selectedColor: const Color(0xFF1E4D3B),
+                          backgroundColor: context.bookColors.surface,
+                          selectedColor: context.bookColors.primary,
+                          checkmarkColor: context.bookColors.onPrimary,
                           labelStyle: TextStyle(
-                            color: isSelected ? Colors.white : Colors.black,
+                            color: isSelected
+                                ? context.bookColors.onPrimary
+                                : context.bookColors.text,
                           ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
@@ -187,10 +197,13 @@ class _BrowserScreenState extends State<BrowserScreen> {
                     child: FilterChip(
                       selected: isSelected,
                       label: Text(author),
-                      backgroundColor: Colors.white,
-                      selectedColor: const Color(0xFF1E4D3B),
+                      backgroundColor: context.bookColors.surface,
+                      selectedColor: context.bookColors.primary,
+                      checkmarkColor: context.bookColors.onPrimary,
                       labelStyle: TextStyle(
-                        color: isSelected ? Colors.white : Colors.black,
+                        color: isSelected
+                            ? context.bookColors.onPrimary
+                            : context.bookColors.text,
                       ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
@@ -207,18 +220,25 @@ class _BrowserScreenState extends State<BrowserScreen> {
               children: [
                 Text(
                   '${filtered.length} books',
-                  style: const TextStyle(color: Colors.black54, fontSize: 13),
+                  style: TextStyle(
+                    color: context.bookColors.secondaryText,
+                    fontSize: 13,
+                  ),
                 ),
                 const Spacer(),
-                const Icon(Icons.sort, size: 18, color: Colors.black54),
+                Icon(
+                  Icons.sort,
+                  size: 18,
+                  color: context.bookColors.secondaryText,
+                ),
                 const SizedBox(width: 6),
                 DropdownButton<String>(
                   value: sortBy,
                   underline: const SizedBox(),
                   isDense: true,
                   borderRadius: BorderRadius.circular(10),
-                  style: const TextStyle(
-                    color: Color(0xFF1E4D3B),
+                  style: TextStyle(
+                    color: context.bookColors.primary,
                     fontWeight: FontWeight.w600,
                     fontSize: 13,
                   ),
@@ -268,11 +288,11 @@ class _BrowserScreenState extends State<BrowserScreen> {
                                       Container(
                                         width: double.infinity,
                                         height: double.infinity,
-                                        color: const Color(0xFFF5F5F0),
+                                        color: context.bookColors.background,
                                         alignment: Alignment.center,
-                                        child: const Icon(
+                                        child: Icon(
                                           Icons.menu_book,
-                                          color: Colors.black45,
+                                          color: context.bookColors.mutedText,
                                           size: 32,
                                         ),
                                       ),
@@ -289,8 +309,8 @@ class _BrowserScreenState extends State<BrowserScreen> {
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.all(4),
-                                    decoration: const BoxDecoration(
-                                      color: Colors.white,
+                                    decoration: BoxDecoration(
+                                      color: context.bookColors.surface,
                                       shape: BoxShape.circle,
                                     ),
                                     child: Icon(
@@ -299,7 +319,7 @@ class _BrowserScreenState extends State<BrowserScreen> {
                                           : Icons.favorite_border,
                                       color: isSaved
                                           ? Colors.red
-                                          : Colors.black54,
+                                          : context.bookColors.secondaryText,
                                       size: 18,
                                     ),
                                   ),
@@ -322,8 +342,8 @@ class _BrowserScreenState extends State<BrowserScreen> {
                           book.author,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            color: Colors.black54,
+                          style: TextStyle(
+                            color: context.bookColors.secondaryText,
                             fontSize: 11,
                           ),
                         ),
@@ -332,8 +352,8 @@ class _BrowserScreenState extends State<BrowserScreen> {
                           children: [
                             Text(
                               '\$${book.price.toStringAsFixed(2)}',
-                              style: const TextStyle(
-                                color: Color(0xFF1E4D3B),
+                              style: TextStyle(
+                                color: context.bookColors.primary,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 12,
                               ),

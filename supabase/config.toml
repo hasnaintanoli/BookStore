@@ -1,0 +1,6 @@
+project_id = "BookStore"
+
+[functions.upload-book-cover]
+# This endpoint verifies Firebase RS256 ID tokens and live bookstore admin flags
+# itself. Supabase's JWT verifier cannot validate this Firebase token.
+verify_jwt = false

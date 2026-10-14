@@ -1,7 +1,10 @@
+import '../../theme/book_theme.dart';
 import 'package:flutter/material.dart';
 import '../../models/book.dart';
 import '../../services/store_repository.dart';
 import '../../widgets/book_editor_sheet.dart';
+import '../../services/book_cover_service.dart';
+import '../user_session.dart';
 
 class ManageBooksScreen extends StatefulWidget {
   final List<Book> allBooks;
@@ -20,6 +23,33 @@ class ManageBooksScreen extends StatefulWidget {
 class _ManageBooksScreenState extends State<ManageBooksScreen> {
   final _searchCtl = TextEditingController();
   String _q = '';
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => recoverCover());
+  }
+
+  Future<void> recoverCover() async {
+    final ownerUid = UserSession.uid;
+    try {
+      final cover = await BookCoverService().recover();
+      if (!mounted ||
+          cover == null ||
+          UserSession.uid != ownerUid ||
+          !UserSession.isAdmin)
+        return;
+      _snack('Picture recovered. Enter the book details to save it.');
+      await _openForm(initialCover: cover);
+    } catch (error) {
+      if (mounted)
+        _snack(
+          error is BookCoverException
+              ? error.message
+              : 'Choose the book picture again.',
+        );
+    }
+  }
 
   List<Book> get _vis {
     if (_q.isEmpty) return widget.allBooks;
@@ -45,12 +75,21 @@ class _ManageBooksScreenState extends State<ManageBooksScreen> {
     super.dispose();
   }
 
-  Future<void> _openForm({Book? existing, int? idx}) async {
+  Future<void> _openForm({
+    Book? existing,
+    int? idx,
+    PickedBookCover? initialCover,
+  }) async {
     final saved = await showModalBottomSheet<bool>(
       context: context,
       isScrollControlled: true,
-      builder: (_) =>
-          BookEditorSheet(repository: widget.repository, existing: existing),
+      isDismissible: false,
+      enableDrag: false,
+      builder: (_) => BookEditorSheet(
+        repository: widget.repository,
+        existing: existing,
+        initialCover: initialCover,
+      ),
     );
     if (saved == true && mounted)
       _snack(existing == null ? 'Book added' : 'Book updated');
@@ -119,18 +158,22 @@ class _ManageBooksScreenState extends State<ManageBooksScreen> {
     var items = _vis;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F1E8),
+      backgroundColor: context.bookColors.adminBackground,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFF5F1E8),
+        backgroundColor: context.bookColors.adminBackground,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 18),
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: context.bookColors.text,
+            size: 18,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title: Text(
           'Books',
           style: TextStyle(
-            color: Colors.black,
+            color: context.bookColors.text,
             fontWeight: FontWeight.bold,
             fontSize: 18,
           ),
@@ -140,17 +183,21 @@ class _ManageBooksScreenState extends State<ManageBooksScreen> {
             padding: const EdgeInsets.only(right: 16),
             child: ElevatedButton.icon(
               onPressed: () => _openForm(),
-              icon: const Icon(Icons.add, size: 16, color: Colors.white),
-              label: const Text(
+              icon: Icon(
+                Icons.add,
+                size: 16,
+                color: context.bookColors.onPrimary,
+              ),
+              label: Text(
                 'Add',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: context.bookColors.onPrimary,
                   fontWeight: FontWeight.bold,
                   fontSize: 13,
                 ),
               ),
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF1F3A2E),
+                backgroundColor: context.bookColors.adminPrimary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
@@ -166,17 +213,24 @@ class _ManageBooksScreenState extends State<ManageBooksScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: context.bookColors.surface,
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.grey.shade300),
+                border: Border.all(color: context.bookColors.border),
               ),
               child: TextField(
                 controller: _searchCtl,
                 onChanged: (v) => setState(() => _q = v),
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: 'Search catalog',
-                  hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
-                  prefixIcon: Icon(Icons.search, color: Colors.grey, size: 20),
+                  hintStyle: TextStyle(
+                    color: context.bookColors.mutedText,
+                    fontSize: 14,
+                  ),
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: context.bookColors.mutedText,
+                    size: 20,
+                  ),
                   suffixIcon: null,
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.symmetric(vertical: 14),
@@ -187,10 +241,10 @@ class _ManageBooksScreenState extends State<ManageBooksScreen> {
           const SizedBox(height: 8),
           Expanded(
             child: items.isEmpty
-                ? const Center(
+                ? Center(
                     child: Text(
                       'No books found',
-                      style: TextStyle(color: Colors.grey),
+                      style: TextStyle(color: context.bookColors.mutedText),
                     ),
                   )
                 : ListView.builder(
@@ -203,9 +257,9 @@ class _ManageBooksScreenState extends State<ManageBooksScreen> {
                         margin: const EdgeInsets.only(bottom: 12),
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: context.bookColors.surface,
                           borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.grey.shade200),
+                          border: Border.all(color: context.bookColors.border),
                         ),
                         child: Row(
                           children: [
@@ -216,18 +270,27 @@ class _ManageBooksScreenState extends State<ManageBooksScreen> {
                                 color: _colorFor(b),
                                 borderRadius: BorderRadius.circular(4),
                               ),
-                              child: Center(
-                                child: Text(
-                                  b.title
-                                      .substring(
-                                        0,
-                                        b.title.length < 2 ? b.title.length : 2,
-                                      )
-                                      .toUpperCase(),
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(4),
+                                child: Image.network(
+                                  b.imageUrl,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (_, error, stack) => Center(
+                                    child: Text(
+                                      b.title
+                                          .substring(
+                                            0,
+                                            b.title.length < 2
+                                                ? b.title.length
+                                                : 2,
+                                          )
+                                          .toUpperCase(),
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -248,7 +311,7 @@ class _ManageBooksScreenState extends State<ManageBooksScreen> {
                                   Text(
                                     '${b.author} Â· \$${b.price.toStringAsFixed(2)} Â· ${b.category}',
                                     style: TextStyle(
-                                      color: Colors.grey.shade600,
+                                      color: context.bookColors.secondaryText,
                                       fontSize: 11,
                                     ),
                                   ),
@@ -256,19 +319,19 @@ class _ManageBooksScreenState extends State<ManageBooksScreen> {
                               ),
                             ),
                             IconButton(
-                              icon: const Icon(
+                              icon: Icon(
                                 Icons.edit,
                                 size: 18,
-                                color: Colors.grey,
+                                color: context.bookColors.mutedText,
                               ),
                               onPressed: () =>
                                   _openForm(existing: b, idx: realIdx),
                             ),
                             IconButton(
-                              icon: const Icon(
+                              icon: Icon(
                                 Icons.delete_outline,
                                 size: 18,
-                                color: Colors.grey,
+                                color: context.bookColors.mutedText,
                               ),
                               onPressed: () => _confirmDelete(realIdx),
                             ),

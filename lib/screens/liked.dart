@@ -1,3 +1,4 @@
+import '../theme/book_theme.dart';
 import 'package:flutter/material.dart';
 import '../models/book.dart';
 import '../widgets/book_detail_modal.dart';
@@ -25,25 +26,25 @@ class LikedScreen extends StatelessWidget {
         .toList();
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F0),
+      backgroundColor: context.bookColors.background,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFF5F5F0),
+        backgroundColor: context.bookColors.background,
         elevation: 0,
-        title: const Text(
+        title: Text(
           'Saved Books',
           style: TextStyle(
-            color: Colors.black,
+            color: context.bookColors.text,
             fontWeight: FontWeight.bold,
             fontSize: 22,
           ),
         ),
         actions: [
           CircleAvatar(
-            backgroundColor: Colors.white,
+            backgroundColor: context.bookColors.surface,
             child: IconButton(
-              icon: const Icon(
+              icon: Icon(
                 Icons.shopping_bag_outlined,
-                color: Colors.black,
+                color: context.bookColors.text,
               ),
               onPressed: () => Navigator.pushNamed(context, '/cart'),
             ),
@@ -61,34 +62,34 @@ class LikedScreen extends StatelessWidget {
                     Container(
                       width: 80,
                       height: 80,
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
+                      decoration: BoxDecoration(
+                        color: context.bookColors.surface,
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(color: Colors.black12, blurRadius: 10),
                         ],
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.favorite_outline,
                         size: 40,
-                        color: Color(0xFF1E4D3B),
+                        color: context.bookColors.primary,
                       ),
                     ),
                     const SizedBox(height: 20),
-                    const Text(
+                    Text(
                       'No saved books yet',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                        color: context.bookColors.text,
                       ),
                     ),
                     const SizedBox(height: 8),
-                    const Text(
+                    Text(
                       'Tap the heart icon on any book while browsing to add it to your reading list.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: Colors.black54,
+                        color: context.bookColors.secondaryText,
                         fontSize: 14,
                         height: 1.4,
                       ),
@@ -103,7 +104,7 @@ class LikedScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 final book = savedBooks[index];
                 return Card(
-                  color: Colors.white,
+                  color: context.bookColors.surface,
                   margin: const EdgeInsets.only(bottom: 12),
                   child: ListTile(
                     onTap: () => showBookDetailModal(
@@ -123,11 +124,11 @@ class LikedScreen extends StatelessWidget {
                         errorBuilder: (context, error, stackTrace) => Container(
                           width: 45,
                           height: 65,
-                          color: const Color(0xFFF5F5F0),
+                          color: context.bookColors.background,
                           alignment: Alignment.center,
-                          child: const Icon(
+                          child: Icon(
                             Icons.menu_book,
-                            color: Colors.black45,
+                            color: context.bookColors.mutedText,
                             size: 20,
                           ),
                         ),
@@ -144,9 +145,9 @@ class LikedScreen extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         IconButton(
-                          icon: const Icon(
+                          icon: Icon(
                             Icons.add_shopping_cart,
-                            color: Color(0xFF1E4D3B),
+                            color: context.bookColors.primary,
                           ),
                           onPressed: () async {
                             try {

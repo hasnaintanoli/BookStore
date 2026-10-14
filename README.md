@@ -17,6 +17,11 @@ database-validated integer-cent totals, versioned carts, stable order retries an
 in-app order notifications.
 Checkout selects saved cards and offers **Create payment method** when needed.
 Only the card brand, last four digits and expiry are saved. Bank charges are not integrated.
+Administrators can pick a book cover from the gallery and preview it before saving.
+Covers are stored in the BookStore Supabase project's `book-covers` bucket, with
+a 20 MB limit per JPG, PNG or WebP image. The upload function verifies the current
+Firebase account and bookstore admin access; image URLs are saved with books in
+Firebase. Existing HTTPS cover URLs can also be used.
 Live Firebase setup is applied; device verification is tracked separately from
 local checks.
 
@@ -60,6 +65,8 @@ firebase deploy --only database --project bookstore-fe6f2
 - `lib/screens/notifications.dart`: live order inbox with read acknowledgements.
 - `lib/screens`: customer flows and admin screens.
 - `database.rules.json`: owner isolation and administrator permissions.
+- `supabase/functions/upload-book-cover`: Firebase-admin-verified cover uploads.
+- `supabase/storage.sql`: public cover bucket configuration with uploads restricted to the server.
 - `test`: controller, account isolation, order and login UI tests.
 
 ## Outstanding work

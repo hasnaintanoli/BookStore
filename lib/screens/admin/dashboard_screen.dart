@@ -1,3 +1,4 @@
+import '../../theme/book_theme.dart';
 import 'package:flutter/material.dart';
 import '../../models/book.dart';
 import '../user_session.dart';
@@ -98,13 +99,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F1E8),
+      backgroundColor: context.bookColors.adminBackground,
       body: SafeArea(
         child: Column(
           children: [
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-              color: const Color(0xFF1F3A2E),
+              color: context.bookColors.adminPrimary,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -114,17 +115,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       Text(
                         'MARGIN ADMIN',
                         style: TextStyle(
-                          color: Colors.green.shade200,
+                          color: context.bookColors.onPrimary.withValues(
+                            alpha: 0.8,
+                          ),
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
                           letterSpacing: 1,
                         ),
                       ),
                       const SizedBox(height: 4),
-                      const Text(
+                      Text(
                         'Dashboard',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: context.bookColors.onPrimary,
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
@@ -132,7 +135,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ],
                   ),
                   IconButton(
-                    icon: const Icon(Icons.logout, color: Colors.white),
+                    icon: Icon(
+                      Icons.logout,
+                      color: context.bookColors.onPrimary,
+                    ),
                     onPressed: _logout,
                   ),
                 ],
@@ -140,7 +146,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             Expanded(
               child: RefreshIndicator(
-                color: const Color(0xFF1F3A2E),
+                color: context.bookColors.adminPrimary,
                 onRefresh: () async {
                   await _refreshUsers();
                 },
@@ -215,10 +221,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                       const SizedBox(height: 16),
                       if (widget.orders.isEmpty)
-                        const Center(
+                        Center(
                           child: Text(
                             'No orders yet',
-                            style: TextStyle(color: Colors.grey),
+                            style: TextStyle(
+                              color: context.bookColors.mutedText,
+                            ),
                           ),
                         )
                       else
@@ -244,23 +252,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
     child: Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.bookColors.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: context.bookColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             v,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF1F3A2E),
+              color: context.bookColors.adminPrimary,
             ),
           ),
           const SizedBox(height: 4),
-          Text(l, style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
+          Text(
+            l,
+            style: TextStyle(
+              fontSize: 12,
+              color: context.bookColors.secondaryText,
+            ),
+          ),
           const SizedBox(height: 8),
           Text(
             s,
@@ -282,13 +296,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: context.bookColors.surface,
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: Colors.grey.shade300),
+          border: Border.all(color: context.bookColors.border),
         ),
         child: Row(
           children: [
-            Icon(i, size: 18, color: const Color(0xFF1F3A2E)),
+            Icon(i, size: 18, color: context.bookColors.adminPrimary),
             const SizedBox(width: 8),
             Text(
               l,
@@ -310,9 +324,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.bookColors.surface,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: context.bookColors.border),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -330,7 +344,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
               const SizedBox(height: 4),
               Text(
                 '${o['items']} items Â· \$${o['price']}',
-                style: TextStyle(color: Colors.grey.shade600, fontSize: 11),
+                style: TextStyle(
+                  color: context.bookColors.secondaryText,
+                  fontSize: 11,
+                ),
               ),
             ],
           ),

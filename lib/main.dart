@@ -22,6 +22,7 @@ import 'services/store_controller.dart';
 import 'services/store_repository.dart';
 
 import 'services/auth_service.dart';
+import 'theme/book_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -198,20 +199,8 @@ class _BookStoreAppState extends State<BookStoreApp> {
       debugShowCheckedModeBanner: false,
       scaffoldMessengerKey: _messenger,
       navigatorKey: _navigator,
-      theme: ThemeData(
-        useMaterial3: true,
-        fontFamily: 'serif',
-        scaffoldBackgroundColor: const Color(0xFFF5F5F0),
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF1E4D3B)),
-      ),
-      darkTheme: ThemeData(
-        useMaterial3: true,
-        brightness: Brightness.dark,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF5FAF91),
-          brightness: Brightness.dark,
-        ),
-      ),
+      theme: bookTheme(Brightness.light),
+      darkTheme: bookTheme(Brightness.dark),
       themeMode: dark ? ThemeMode.dark : ThemeMode.light,
       initialRoute: widget.initialRoute,
       onGenerateInitialRoutes: (route) => [

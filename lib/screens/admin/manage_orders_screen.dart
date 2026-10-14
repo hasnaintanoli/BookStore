@@ -1,3 +1,4 @@
+import '../../theme/book_theme.dart';
 import 'package:flutter/material.dart';
 import '../../models/book.dart';
 import '../../services/store_repository.dart';
@@ -42,7 +43,7 @@ class _ManageOrdersScreenState extends State<ManageOrdersScreen> {
       case 'Processing':
         return Colors.orange;
     }
-    return Colors.grey;
+    return context.bookColors.mutedText;
   }
 
   Future<void> _swapStatus(int idx) async {
@@ -67,7 +68,7 @@ class _ManageOrdersScreenState extends State<ManageOrdersScreen> {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: Colors.grey.shade300,
+                color: context.bookColors.border,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -177,18 +178,22 @@ class _ManageOrdersScreenState extends State<ManageOrdersScreen> {
     var items = _vis;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F1E8),
+      backgroundColor: context.bookColors.adminBackground,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFF5F1E8),
+        backgroundColor: context.bookColors.adminBackground,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 18),
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: context.bookColors.text,
+            size: 18,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title: Text(
           'Orders',
           style: TextStyle(
-            color: Colors.black,
+            color: context.bookColors.text,
             fontWeight: FontWeight.bold,
             fontSize: 18,
           ),
@@ -213,18 +218,22 @@ class _ManageOrdersScreenState extends State<ManageOrdersScreen> {
                           vertical: 8,
                         ),
                         decoration: BoxDecoration(
-                          color: on ? const Color(0xFF1F3A2E) : Colors.white,
+                          color: on
+                              ? context.bookColors.adminPrimary
+                              : context.bookColors.surface,
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
                             color: on
-                                ? const Color(0xFF1F3A2E)
-                                : Colors.grey.shade300,
+                                ? context.bookColors.adminPrimary
+                                : context.bookColors.border,
                           ),
                         ),
                         child: Text(
                           _filters[idx],
                           style: TextStyle(
-                            color: on ? Colors.white : Colors.black87,
+                            color: on
+                                ? context.bookColors.onPrimary
+                                : context.bookColors.text,
                             fontWeight: FontWeight.w600,
                             fontSize: 13,
                           ),
@@ -239,10 +248,10 @@ class _ManageOrdersScreenState extends State<ManageOrdersScreen> {
           const SizedBox(height: 8),
           Expanded(
             child: items.isEmpty
-                ? const Center(
+                ? Center(
                     child: Text(
                       'No orders here',
-                      style: TextStyle(color: Colors.grey),
+                      style: TextStyle(color: context.bookColors.mutedText),
                     ),
                   )
                 : ListView.builder(
@@ -256,9 +265,9 @@ class _ManageOrdersScreenState extends State<ManageOrdersScreen> {
                         margin: const EdgeInsets.only(bottom: 12),
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: context.bookColors.surface,
                           borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.grey.shade200),
+                          border: Border.all(color: context.bookColors.border),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -305,7 +314,7 @@ class _ManageOrdersScreenState extends State<ManageOrdersScreen> {
                             Text(
                               '${o.shippingAddress} · ${o.items.length} items',
                               style: TextStyle(
-                                color: Colors.grey.shade600,
+                                color: context.bookColors.secondaryText,
                                 fontSize: 11,
                               ),
                             ),
@@ -321,9 +330,9 @@ class _ManageOrdersScreenState extends State<ManageOrdersScreen> {
                                     style: TextStyle(fontSize: 12),
                                   ),
                                   style: OutlinedButton.styleFrom(
-                                    foregroundColor: Colors.black87,
+                                    foregroundColor: context.bookColors.text,
                                     side: BorderSide(
-                                      color: Colors.grey.shade300,
+                                      color: context.bookColors.border,
                                     ),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(4),

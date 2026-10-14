@@ -1,10 +1,9 @@
+import '../theme/book_theme.dart';
 import 'dart:async';
 import '../services/review_service.dart';
 import 'package:flutter/material.dart';
 import '../models/book.dart';
 import '../screens/user_session.dart';
-
-const _green = Color(0xFF1E4D3B);
 
 void showBookDetailModal(
   BuildContext context,
@@ -16,7 +15,6 @@ void showBookDetailModal(
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
-    backgroundColor: Colors.white,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
@@ -121,7 +119,6 @@ class _BookDetailSheetState extends State<_BookDetailSheet> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -167,7 +164,7 @@ class _BookDetailSheetState extends State<_BookDetailSheet> {
                     decoration: InputDecoration(
                       hintText: 'Share what you thought about this book...',
                       filled: true,
-                      fillColor: const Color(0xFFF5F5F0),
+                      fillColor: context.bookColors.background,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide.none,
@@ -222,13 +219,13 @@ class _BookDetailSheetState extends State<_BookDetailSheet> {
                               );
                             },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: _green,
+                        backgroundColor: context.bookColors.primary,
                         padding: const EdgeInsets.symmetric(vertical: 12),
                       ),
-                      child: const Text(
+                      child: Text(
                         'Submit Review',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: context.bookColors.onPrimary,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -264,7 +261,7 @@ class _BookDetailSheetState extends State<_BookDetailSheet> {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: Colors.grey[300],
+                  color: context.bookColors.border,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -283,11 +280,11 @@ class _BookDetailSheetState extends State<_BookDetailSheet> {
                     errorBuilder: (context, error, stackTrace) => Container(
                       width: 90,
                       height: 130,
-                      color: const Color(0xFFF5F5F0),
+                      color: context.bookColors.background,
                       alignment: Alignment.center,
-                      child: const Icon(
+                      child: Icon(
                         Icons.menu_book,
-                        color: Colors.black45,
+                        color: context.bookColors.mutedText,
                         size: 32,
                       ),
                     ),
@@ -308,7 +305,9 @@ class _BookDetailSheetState extends State<_BookDetailSheet> {
                       const SizedBox(height: 4),
                       Text(
                         'By ${book.author}',
-                        style: const TextStyle(color: Colors.black54),
+                        style: TextStyle(
+                          color: context.bookColors.secondaryText,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       Row(
@@ -320,8 +319,8 @@ class _BookDetailSheetState extends State<_BookDetailSheet> {
                           ),
                           Text(
                             '(${reviews.length} reviews)',
-                            style: const TextStyle(
-                              color: Colors.black45,
+                            style: TextStyle(
+                              color: context.bookColors.mutedText,
                               fontSize: 12,
                             ),
                           ),
@@ -330,10 +329,10 @@ class _BookDetailSheetState extends State<_BookDetailSheet> {
                       const SizedBox(height: 8),
                       Text(
                         '\$${book.price.toStringAsFixed(2)}',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: _green,
+                          color: context.bookColors.primary,
                         ),
                       ),
                     ],
@@ -349,7 +348,7 @@ class _BookDetailSheetState extends State<_BookDetailSheet> {
             const SizedBox(height: 6),
             Text(
               book.description,
-              style: const TextStyle(color: Colors.black87, height: 1.4),
+              style: TextStyle(color: context.bookColors.text, height: 1.4),
             ),
             const SizedBox(height: 20),
             Row(
@@ -387,17 +386,17 @@ class _BookDetailSheetState extends State<_BookDetailSheet> {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: _green,
+                      backgroundColor: context.bookColors.primary,
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.shopping_bag_outlined,
-                      color: Colors.white,
+                      color: context.bookColors.onPrimary,
                     ),
-                    label: const Text(
+                    label: Text(
                       'Add to Cart',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: context.bookColors.onPrimary,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -417,12 +416,15 @@ class _BookDetailSheetState extends State<_BookDetailSheet> {
                 ),
                 TextButton.icon(
                   onPressed: _showWriteReviewSheet,
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.rate_review_outlined,
                     size: 18,
-                    color: _green,
+                    color: context.bookColors.primary,
                   ),
-                  label: const Text('Write', style: TextStyle(color: _green)),
+                  label: Text(
+                    'Write',
+                    style: TextStyle(color: context.bookColors.primary),
+                  ),
                 ),
               ],
             ),
@@ -430,11 +432,11 @@ class _BookDetailSheetState extends State<_BookDetailSheet> {
             if (loadingReviews) const LinearProgressIndicator(),
             if (reviewError != null) Text(reviewError!),
             if (!loadingReviews && reviews.isEmpty)
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(vertical: 12),
                 child: Text(
                   'No reviews yet. Be the first to review this book!',
-                  style: TextStyle(color: Colors.black54),
+                  style: TextStyle(color: context.bookColors.secondaryText),
                 ),
               )
             else
@@ -451,7 +453,7 @@ class _BookDetailSheetState extends State<_BookDetailSheet> {
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFFF5F5F0),
+        color: context.bookColors.background,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
@@ -461,11 +463,11 @@ class _BookDetailSheetState extends State<_BookDetailSheet> {
             children: [
               CircleAvatar(
                 radius: 14,
-                backgroundColor: _green,
+                backgroundColor: context.bookColors.primary,
                 child: Text(
                   review.user.isNotEmpty ? review.user[0].toUpperCase() : 'U',
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: context.bookColors.onPrimary,
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
                   ),
@@ -505,14 +507,18 @@ class _BookDetailSheetState extends State<_BookDetailSheet> {
                 Icon(
                   review.likedByMe ? Icons.thumb_up : Icons.thumb_up_outlined,
                   size: 15,
-                  color: review.likedByMe ? _green : Colors.black45,
+                  color: review.likedByMe
+                      ? context.bookColors.primary
+                      : context.bookColors.mutedText,
                 ),
                 const SizedBox(width: 4),
                 Text(
                   'Helpful (${review.likes})',
                   style: TextStyle(
                     fontSize: 12,
-                    color: review.likedByMe ? _green : Colors.black45,
+                    color: review.likedByMe
+                        ? context.bookColors.primary
+                        : context.bookColors.mutedText,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
